@@ -1,69 +1,84 @@
 var GRAPHS = (function () {
-    var GRAPHS = {};
+	var GRAPHS = {};
 
-    GRAPHS.createPeriodView = function (graphelement, model) {
-        var periodData = model.get("transactions");
-        var displayFormat = model.get("displayFormat");
-        var start = model.get("start")
-        var end = model.get("end");
-        console.log(periodData);
-        console.log(start.format());
+	GRAPHS.createPeriodView = function (graphelement, model) {
+		var periodData = model.get("transactions");
+		var displayFormat = model.get("displayFormat");
+		var start = model.get("start")
+		var end = model.get("end");
+		console.log(periodData);
+		console.log(start.format());
 
-        nv.addGraph(function () {
-            var chart = nv.models.multiBarChart()
-                .transitionDuration(350)
-                .reduceXTicks(true) //If 'false', every single x-axis tick label will be rendered.
-                .rotateLabels(90) //Angle to rotate x-axis labels.
-                .showControls(false) //Allow user to switch between 'Grouped' and 'Stacked' mode.
-                .groupSpacing(0.1)
-                .stacked(true)
-                .height(250)
-                .margin({top: 0, right: 0, bottom: 0, left: 0})
-                .showLegend(false);
-
-            chart.yAxis
-                .tickFormat(d3.format('$,d'));
-
-            chart.xAxis
-                .tickFormat(function (d) {
-                    return d3.time.format(displayFormat)(new Date(d))
-                });
+		nv.addGraph(function () {
+			var chart = nv.models.multiBarChart()
+				.transitionDuration(350)
+				.reduceXTicks(false) //If 'false', every single x-axis tick label will be rendered.
+				.rotateLabels(0) //Angle to rotate x-axis labels.
+				.showControls(false) //Allow user to switch between 'Grouped' and 'Stacked' mode.
+				.groupSpacing(0.1)
+				.stacked(true)
+				.height(250)
+				.margin({
+					top: 0,
+					right: 0,
+					bottom: 0,
+					left: 0
+				})
+				.showLegend(false)
 
 
-            d3.selectAll(graphelement.toArray())
-                .datum(processData(periodData))
-                .call(chart);
-
-            nv.utils.windowResize(chart.update);
-
-            return chart;
-        });
-    };
+			chart.yAxis
+				.tickFormat(function (d) {
+					return ""
+				})
 
 
-    //Generate some nice data.
-    var processData = function (periodData) {
+			chart.xAxis
+				.tickFormat(d3.time.format(displayFormat));
 
-        var graphdata = [{
-            key: "spending",
-            values: []
+			var scale = d3.time.scale();
+			scale.range([start.toDate(), end.toDate()]);
+			scale.invert();
+			scale.ticks(d3.time.day, 1);
+
+			chart.xAxis
+				.scale(scale);
+
+
+			d3.selectAll(graphelement.toArray())
+				.datum(processData(periodData))
+				.call(chart);
+
+			nv.utils.windowResize(chart.update);
+
+			return chart;
+		});
+	};
+
+
+	//Generate some nice data.
+	var processData = function (periodData) {
+
+		var graphdata = [{
+			key: "spending",
+			values: []
         }];
-        for (var i = 0; i < periodData.length; i++) {
+		for (var i = 0; i < periodData.length; i++) {
 
-            var t = periodData[i];
+			var t = periodData[i];
 
-            var newdataum = {
-                y: t.Amount,
-                x: t.Date.toDate()
-            };
+			var newdataum = {
+				y: t.Amount,
+				x: t.Date.toDate()
+			};
 
-            graphdata[0].values.push(newdataum);
-        }
+			graphdata[0].values.push(newdataum);
+		}
 
 
 
-        return graphdata;
-    };
+		return graphdata;
+	};
 
-    return GRAPHS;
+	return GRAPHS;
 }());
