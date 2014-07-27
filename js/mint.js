@@ -34,8 +34,8 @@ var MINT = (function () {
         return new Date(year, month, 0).getDate();
     }
 
-    MINT.stats = function (data, targetdate) {
-        var salary = 80000;
+    MINT.stats = function (data, targetdate, targetbudget) {
+        var salary = targetbudget;
         var dailyBudget = salary / 365;
 
         var stats = {
@@ -69,7 +69,7 @@ var MINT = (function () {
                     processTransaction(transaction, stats.week);
                 }
                 if (date.isSame(targetdate, 'day')) {
-                    processTransaction(transaction, stats.week);
+                    processTransaction(transaction, stats.day);
                 }
             }
 
