@@ -1,33 +1,69 @@
-nv.addGraph(function() {
-    var chart = nv.models.multiBarChart()
-      .transitionDuration(350)
-      .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-      .rotateLabels(0)      //Angle to rotate x-axis labels.
-      .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-      .groupSpacing(0.1)    //Distance between each group of bars.
-    ;
+var GRAPHS = (function () {
+    var GRAPHS = {};
 
-    chart.xAxis
-        .tickFormat(d3.format(',f'));
+    GRAPHS.createPeriodView = function (graphelement, model) {
+        var periodData = model.get("transactions");
+        var displayFormat = model.get("displayFormat");
+        var start = model.get("start")
+        var end = model.get("end");
+        console.log(periodData);
+        console.log(start.format());
 
-    chart.yAxis
-        .tickFormat(d3.format(',.1f'));
+        nv.addGraph(function () {
+            var chart = nv.models.multiBarChart()
+                .transitionDuration(350)
+                .reduceXTicks(true) //If 'false', every single x-axis tick label will be rendered.
+                .rotateLabels(90) //Angle to rotate x-axis labels.
+                .showControls(false) //Allow user to switch between 'Grouped' and 'Stacked' mode.
+                .groupSpacing(0.1)
+                .stacked(true)
+                .height(250)
+                .margin({top: 0, right: 0, bottom: 0, left: 0})
+                .showLegend(false);
 
-    d3.select('#chart1 svg')
-        .datum(exampleData())
-        .call(chart);
+            chart.yAxis
+                .tickFormat(d3.format('$,d'));
 
-    nv.utils.windowResize(chart.update);
+            chart.xAxis
+                .tickFormat(function (d) {
+                    return d3.time.format(displayFormat)(new Date(d))
+                });
 
-    return chart;
-});
 
-//Generate some nice data.
-function exampleData() {
-  return stream_layers(3,10+Math.random()*100,.1).map(function(data, i) {
-    return {
-      key: 'Stream #' + i,
-      values: data
+            d3.selectAll(graphelement.toArray())
+                .datum(processData(periodData))
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
+        });
     };
-  });
-}
+
+
+    //Generate some nice data.
+    var processData = function (periodData) {
+
+        var graphdata = [{
+            key: "spending",
+            values: []
+        }];
+        for (var i = 0; i < periodData.length; i++) {
+
+            var t = periodData[i];
+
+            var newdataum = {
+                y: t.Amount,
+                x: t.Date.toDate()
+            };
+
+            graphdata[0].values.push(newdataum);
+        }
+
+
+
+        return graphdata;
+    };
+
+    return GRAPHS;
+}());

@@ -25,9 +25,12 @@ var PeriodView = Marionette.ItemView.extend({
     modelEvents: {
         'change': 'fieldsChanged'
     },
-
     fieldsChanged: function () {
         this.render();
+    },
+    onRender: function () {
+        var graphdiv = this.$el.find(".graph");
+        GRAPHS.createPeriodView(graphdiv, this.model);
     }
 });
 
@@ -37,13 +40,17 @@ var TimePeriod = Backbone.Model.extend({
     spent: 100,
     budget: 100,
     status: "neutral",
-    profit: 0
+    profit: 0,
+    transactions: [],
+    displayFormat: "",
+    start: moment(),
+    end: moment()
 });
 
 var day = new TimePeriod();
-var week = new TimePeriod();
-var month = new TimePeriod();
-var year = new TimePeriod();
+var week = new TimePeriod({displayFormat: "%a"});
+var month = new TimePeriod({displayFormat: "%e"});
+var year = new TimePeriod({displayFormat: "%m"});
 
 // wire up views to their models
 var todayView = new TodayView({
@@ -60,20 +67,22 @@ var yearView = new PeriodView({
 });
 
 
-
 var dataForPeriod = function (period, name) {
     return {
         name: name,
         spent: Math.round(period.spent),
         budget: Math.round(period.budget),
         status: period.budget - period.spent > 0 ? "positive" : "negative",
-        profit: Math.round(period.budget - period.spent)
+        profit: Math.round(period.budget - period.spent),
+        transactions: period.transactions,
+        start : period.beginPeriod,
+        end : period.endPeriod
     };
 };
 
 var update = function (targetdate, budget) {
 
-    var stats = MINT.stats(data, targetdate, budget);
+    var stats = STATS.get(data, targetdate, budget);
 
     day.set(dataForPeriod(stats.day, targetdate.format('MMMM Do YYYY')));
     week.set(dataForPeriod(stats.week, "This Week"));
@@ -82,7 +91,7 @@ var update = function (targetdate, budget) {
 
 };
 
-var data = MINT.loadData();
+var data = STATS.loadData();
 
 update(moment(), 80000);
 
