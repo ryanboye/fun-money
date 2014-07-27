@@ -71,9 +71,9 @@ var dataForPeriod = function (period, name) {
     };
 };
 
-var update = function (targetdate) {
+var update = function (targetdate, budget) {
 
-    var stats = MINT.stats(data, targetdate);
+    var stats = MINT.stats(data, targetdate, budget);
 
     day.set(dataForPeriod(stats.day, targetdate.format('MMMM Do YYYY')));
     week.set(dataForPeriod(stats.week, "This Week"));
@@ -84,7 +84,7 @@ var update = function (targetdate) {
 
 var data = MINT.loadData();
 
-update(moment());
+update(moment(), 80000);
 
 App.today.show(todayView);
 App.week.show(weekView);
