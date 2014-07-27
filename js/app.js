@@ -16,18 +16,47 @@ var PeriodView = Marionette.ItemView.extend({
     template: "#periodView" 
 });
 
+
+var Today = Backbone.Model.extend({
+	name: "Today",
+	date: "July 24 2014",
+	spent: 16,
+	budget: 50,
+	status:"positive",
+	profit: 50-16,
+});
+var today = new Today();
+
+
+var Week = Backbone.Model.extend({
+	name: "This Week",
+	date: "July 24 2014",
+	spent: 16,
+	budget: 50,
+	status:"positive",
+	profit: 50-16,
+});
+var week = new Week();
+
+var Month = Backbone.Model.extend({
+	name: "This Month",
+	date: "July 24 2014",
+	spent: 16,
+	budget: 50,
+	status:"positive",
+	profit: 50-16,
+});
+var month = new Month();
+
 // Initialize
-
 var todayView = new TodayView({
-	model: today;
+	model: today
 });
-
-var weekView = new WeekView({
-	model: week;
+var weekView = new PeriodView({
+	model: week
 });
-
-var monthView = new MonthView({
-	model: month;
+var monthView = new PeriodView({
+	model: month
 });
 
 App.today.show(todayView);
