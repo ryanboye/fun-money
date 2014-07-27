@@ -1,7 +1,12 @@
 var GRAPHS = (function () {
 	var GRAPHS = {};
 
-	GRAPHS.createPeriodView = function (graphelement, model) {
+	GRAPHS.updatePeriodView = function (model, d3Selection) {
+		var periodData = model.get("transactions");
+		d3Selection.datum(processData(periodData));
+	};
+
+	GRAPHS.createPeriodView = function (graphelement, model, d3Selection) {
 		var periodData = model.get("transactions");
 		var displayFormat = model.get("displayFormat");
 		var start = model.get("start")
@@ -9,7 +14,7 @@ var GRAPHS = (function () {
 		console.log(periodData);
 		console.log(start.format());
 
-		nv.addGraph(function () {
+		nv.addGraph(function (d3Selection) {
 			var chart = nv.models.multiBarChart()
 				.transitionDuration(350)
 				.reduceXTicks(false) //If 'false', every single x-axis tick label will be rendered.
@@ -45,9 +50,10 @@ var GRAPHS = (function () {
 				.scale(scale);
 
 
-			d3.selectAll(graphelement.toArray())
-				.datum(processData(periodData))
+			d3Selection = d3.selectAll(graphelement.toArray());
+			d3Selection.datum(processData(periodData))
 				.call(chart);
+
 
 			nv.utils.windowResize(chart.update);
 

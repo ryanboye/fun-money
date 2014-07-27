@@ -1,93 +1,106 @@
 var App = new Marionette.Application();
 
 App.addRegions({
-    "today": "#today",
-    "week": "#week",
-    "month": "#month",
-    "year": "#year"
+	"today": "#today",
+	"week": "#week",
+	"month": "#month",
+	"year": "#year"
 });
 
 var TodayView = Marionette.ItemView.extend({
-    className: 'view',
-    template: "#todayView",
-    modelEvents: {
-        'change': 'fieldsChanged'
-    },
+	className: 'view',
+	template: "#todayView",
+	modelEvents: {
+		'change': 'fieldsChanged'
+	},
 
-    fieldsChanged: function () {
-        this.render();
-    }
+	fieldsChanged: function () {
+		this.render();
+	}
 });
 
 var PeriodView = Marionette.ItemView.extend({
-    className: 'view',
-    template: "#periodView",
-    modelEvents: {
-        'change': 'fieldsChanged'
-    },
-    fieldsChanged: function () {
-        this.render();
-    },
-    onRender: function () {
-        var graphdiv = this.$el.find(".graph");
-        GRAPHS.createPeriodView(graphdiv, this.model);
-    }
+	className: 'view',
+	template: "#periodView",
+	modelEvents: {
+		'change': 'fieldsChanged'
+	},
+	fieldsChanged: function () {
+		this.render();
+		if (this.d3Selection !== null) {
+			GRAPHS.updatePeriodView(this.model, this.d3Selection);
+		}
+	},
+	d3Selection: null,
+	onRender: function () {
+		if (this.d3Selection === null) {
+			var graphdiv = this.$el.find(".graph");
+			GRAPHS.createPeriodView(graphdiv, this.model, this.d3Selection);
+		}
+	}
 });
 
 var TimePeriod = Backbone.Model.extend({
-    name: "Period",
-    date: moment().format('MMMM Do YYYY'),
-    spent: 100,
-    budget: 100,
-    status: "neutral",
-    profit: 0,
-    transactions: [],
-    displayFormat: "",
-    start: moment(),
-    end: moment()
+	name: "Period",
+	date: moment().format('MMMM Do YYYY'),
+	spent: 100,
+	budget: 100,
+	status: "neutral",
+	profit: 0,
+	transactions: [],
+	displayFormat: "",
+	start: moment(),
+	end: moment(),
+	d3Selection: null
 });
 
 var day = new TimePeriod();
-var week = new TimePeriod({displayFormat: "%a"});
-var month = new TimePeriod({displayFormat: "%e"});
-var year = new TimePeriod({displayFormat: "%m"});
+var week = new TimePeriod({
+	displayFormat: "%a"
+});
+var month = new TimePeriod({
+	displayFormat: "%e"
+});
+var year = new TimePeriod({
+	displayFormat: "%m"
+});
 
 // wire up views to their models
 var todayView = new TodayView({
-    model: day
+	model: day
 });
 var weekView = new PeriodView({
-    model: week
+	model: week
 });
 var monthView = new PeriodView({
-    model: month
+	model: month
 });
 var yearView = new PeriodView({
-    model: year
+	model: year
 });
 
 
 var dataForPeriod = function (period, name) {
-    return {
-        name: name,
-        spent: Math.round(period.spent),
-        budget: Math.round(period.budget),
-        status: period.budget - period.spent > 0 ? "positive" : "negative",
-        profit: Math.round(period.budget - period.spent),
-        transactions: period.transactions,
-        start : period.beginPeriod,
-        end : period.endPeriod
-    };
+	return {
+		name: name,
+		spent: Math.round(period.spent),
+		budget: Math.round(period.budget),
+		status: period.budget - period.spent > 0 ? "positive" : "negative",
+		profit: Math.round(period.budget - period.spent),
+		transactions: period.transactions,
+		start: period.beginPeriod,
+		end: period.endPeriod
+	};
 };
 
 var update = function (targetdate, budget) {
 
-    var stats = STATS.get(data, targetdate, budget);
+	var stats = STATS.get(data, targetdate, budget);
 
-    day.set(dataForPeriod(stats.day, targetdate.format('MMMM Do YYYY')));
-    week.set(dataForPeriod(stats.week, "This Week"));
-    month.set(dataForPeriod(stats.month, "This Month"));
-    year.set(dataForPeriod(stats.year, "This Year"));
+	day.set(dataForPeriod(stats.day, targetdate.format('MMMM Do YYYY')));
+	week.set(dataForPeriod(stats.week, "This Week"));
+	month.set(dataForPeriod(stats.month, "This Month"));
+	year.set(dataForPeriod(stats.year, "This Year"));
 
 };
 
