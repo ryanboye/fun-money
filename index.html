@@ -14,7 +14,7 @@
             <h2 class = "h2"> <%= today.name %> </h2>
 				<h3><%= today.date %></h3>
             <p class = "summary">
-            <span class = "summaryCallout"> <%= today.profit %> </span> out of <span class="summaryCallout"><%= today.budget %></span>
+            <span class = "summaryCallout"> <%= today.spent %> </span> out of <span class="summaryCallout"><%= today.budget %></span>
             </p>
 			</div>
             <div class = "col-sm-5">
@@ -45,7 +45,7 @@
 
 
 
-    <div class="container">
+    <div class="container" id="main">
         <header>
             <h1 class="h1">smart-money</h1>
         </header>
@@ -69,7 +69,10 @@
 
 
 
-
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/papaparse.min.js"></script>
+    <script type="text/javascript" src="js/file.js"></script>
+    <script type="text/javascript" src="js/mint.js"></script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/underscore.js"></script>
     <script type="text/javascript" src="js/backbone.min.js"></script>

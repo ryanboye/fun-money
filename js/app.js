@@ -8,55 +8,58 @@ App.addRegions({
 
 var TodayView = Marionette.ItemView.extend({
     className: 'view',
-    template: "#todayView" 
+    template: "#todayView"
 });
 
 var PeriodView = Marionette.ItemView.extend({
     className: 'view',
-    template: "#periodView" 
+    template: "#periodView"
 });
 
+var data = MINT.loadData();
+var targetdate = moment();
+var stats = MINT.stats(data, targetdate);
 
 var Today = Backbone.Model.extend({
-	name: "Today",
-	date: "July 24 2014",
-	spent: 16,
-	budget: 50,
-	status:"positive",
-	profit: 50-16,
+    name: "Today",
+    date: targetdate.format('MMMM Do YYYY'),
+    spent: stats.day.spent,
+    budget: stats.day.budget,
+    status: stats.day.budget - stats.day.spent > 0 ? "positive" : "negative",
+    profit: stats.day.budget - stats.day.spent
 });
 var today = new Today();
 
 
 var Week = Backbone.Model.extend({
-	name: "This Week",
-	date: "July 24 2014",
-	spent: 16,
-	budget: 50,
-	status:"positive",
-	profit: 50-16,
+    name: "This Week",
+    date: targetdate.format('MMMM Do YYYY'),
+    spent: stats.day.spent,
+    budget: stats.day.budget,
+    status: stats.day.budget - stats.day.spent > 0 ? "positive" : "negative",
+    profit: stats.day.budget - stats.day.spent
 });
 var week = new Week();
 
 var Month = Backbone.Model.extend({
-	name: "This Month",
-	date: "July 24 2014",
-	spent: 16,
-	budget: 50,
-	status:"positive",
-	profit: 50-16,
+    name: "This Month",
+    date: targetdate.format('MMMM Do YYYY'),
+    spent: stats.day.spent,
+    budget: stats.day.budget,
+    status: stats.day.budget - stats.day.spent > 0 ? "positive" : "negative",
+    profit: stats.day.budget - stats.day.spent
 });
 var month = new Month();
 
 // Initialize
 var todayView = new TodayView({
-	model: today
+    model: today
 });
 var weekView = new PeriodView({
-	model: week
+    model: week
 });
 var monthView = new PeriodView({
-	model: month
+    model: month
 });
 
 App.today.show(todayView);

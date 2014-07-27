@@ -14,6 +14,6 @@ function handleDragOver(evt) {
 }
 
 // Setup the dnd listeners.
-var dropZone = document.getElementById('drop_zone');
+var dropZone = document.getElementById('main');
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('drop', handleFileSelect, false);
