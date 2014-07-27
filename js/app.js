@@ -9,12 +9,26 @@ App.addRegions({
 
 var TodayView = Marionette.ItemView.extend({
     className: 'view',
-    template: "#todayView"
+    template: "#todayView",
+    modelEvents: {
+        'change': 'fieldsChanged'
+    },
+
+    fieldsChanged: function () {
+        this.render();
+    }
 });
 
 var PeriodView = Marionette.ItemView.extend({
     className: 'view',
-    template: "#periodView"
+    template: "#periodView",
+    modelEvents: {
+        'change': 'fieldsChanged'
+    },
+
+    fieldsChanged: function () {
+        this.render();
+    }
 });
 
 var TimePeriod = Backbone.Model.extend({
@@ -46,6 +60,7 @@ var yearView = new PeriodView({
 });
 
 
+
 var dataForPeriod = function (period, name) {
     return {
         name: name,
@@ -56,27 +71,21 @@ var dataForPeriod = function (period, name) {
     };
 };
 
-var update = function (data, targetdate) {
+var update = function (targetdate) {
 
-    var targetdate = moment();
     var stats = MINT.stats(data, targetdate);
 
     day.set(dataForPeriod(stats.day, targetdate.format('MMMM Do YYYY')));
     week.set(dataForPeriod(stats.week, "This Week"));
     month.set(dataForPeriod(stats.month, "This Month"));
     year.set(dataForPeriod(stats.year, "This Year"));
+
 };
 
+var data = MINT.loadData();
 
-var onload = function () {
-    var data = MINT.loadData();
+update(moment());
 
-    if (data) {
-        update(data, moment());
-    }
-};
-
-onload();
 App.today.show(todayView);
 App.week.show(weekView);
 App.month.show(monthView);
