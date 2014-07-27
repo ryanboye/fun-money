@@ -1,0 +1,15 @@
+body{
+	font-family: 'Open Sans';
+	font-size: 15px;
+	color: #fff;
+	background-color: ##0e1719;
+}
+
+.h1,.h2,.h3{
+	text-transform: uppercase;
+}
+
+
+.module{
+	margin-bottom: 30px;
+}

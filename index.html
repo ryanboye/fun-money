@@ -3,12 +3,14 @@
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/style.min.css">
 		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/backbone.min.js"></script>
 	</head>
 
 <body>
 
 	<!-- templates go in here -->
-	<script type="text/template" id="today">
+	<script type="text/template" id="todayView">
 		<div class="row">
 			<div class="col-sm-7">
 				<h2 class="h2"><%= period.name %></h2>
@@ -26,7 +28,7 @@
 	</script>
 
 
-	<script type="text/template" id="chart">
+	<script type="text/template" id="chartView">
 		<div class="row">
 			<div class="col-sm-6">
 				<h2 class="h2"><%= period.name %></h2>
