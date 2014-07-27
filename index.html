@@ -20,7 +20,10 @@
 			</div>
             <div class = "col-sm-5">
             <div class = "rounded-chart">
-            <h2 class = "h2 <%= today.status %>"> <%= today.profit %> </h2>
+            <div class="progress-radial progress-25">
+                    <div class="overlay"><h2 class = "h2 <%= today.status %>"> <%= today.profit %> </h2>%</div>
+            </div>
+            
 				</div>
             </div>
 		</div>
@@ -32,8 +35,8 @@
             <div class = "col-sm-6">
             <h2 class = "h2"> <%= today.name %> </h2>
 			</div>
-            <div class = "col-sm-6 pull-right">
-                <div class="status <%= status %>"> <%= today.profit %> </div>
+            <div class = "col-sm-6">
+                <div class="status <%= status %>"><p><%= today.profit %></p></div>
 			</div>
             </div>
 		<div class="row">
@@ -48,7 +51,9 @@
 
     <div class="container" id="main">
         <header>
+            <div class="row">
             <h1 class="h1">smart-money</h1>
+            </div>
         </header>
 
         <!-- today -->
