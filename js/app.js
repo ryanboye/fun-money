@@ -34,20 +34,20 @@ var today = new Today();
 var Week = Backbone.Model.extend({
     name: "This Week",
     date: targetdate.format('MMMM Do YYYY'),
-    spent: stats.day.spent,
-    budget: stats.day.budget,
-    status: stats.day.budget - stats.day.spent > 0 ? "positive" : "negative",
-    profit: stats.day.budget - stats.day.spent
+    spent: stats.week.spent,
+    budget: stats.week.budget,
+    status: stats.week.budget - stats.week.spent > 0 ? "positive" : "negative",
+    profit: stats.week.budget - stats.week.spent
 });
 var week = new Week();
 
 var Month = Backbone.Model.extend({
     name: "This Month",
     date: targetdate.format('MMMM Do YYYY'),
-    spent: stats.day.spent,
-    budget: stats.day.budget,
-    status: stats.day.budget - stats.day.spent > 0 ? "positive" : "negative",
-    profit: stats.day.budget - stats.day.spent
+    spent: stats.month.spent,
+    budget: stats.month.budget,
+    status: stats.month.budget - stats.month.spent > 0 ? "positive" : "negative",
+    profit: stats.month.budget - stats.month.spent
 });
 var month = new Month();
 
