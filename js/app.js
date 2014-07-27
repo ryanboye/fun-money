@@ -17,6 +17,19 @@ var PeriodView = Marionette.ItemView.extend({
 });
 
 // Initialize
+
+var todayView = new TodayView({
+	model: today;
+});
+
+var weekView = new WeekView({
+	model: week;
+});
+
+var monthView = new MonthView({
+	model: month;
+});
+
 App.today.show(todayView);
 App.week.show(weekView);
 App.month.show(monthView);
