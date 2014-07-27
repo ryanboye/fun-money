@@ -1,0 +1,74 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/style.min.css">
+		<script type="text/javascript" src="js/app.js"></script>
+	</head>
+
+<body>
+
+	<!-- templates go in here -->
+	<script type="text/template" id="today">
+		<div class="row">
+			<div class="col-sm-7">
+				<h2 class="h2"><%= period.name %></h2>
+				<h3><%= period.date %></h3>
+				<p class="summary">
+					<span class="summaryCallout"><%= period.profit %></span> out of <span class="summaryCallout"><%= period.budget %></span>
+				</p>
+			</div>
+			<div class="col-sm-5">
+				<div class="rounded-chart">
+					<h2 class="h2 <%= period.status %>"><%= period.profit %></h2>
+				</div>
+			</div>
+		</div>
+	</script>
+
+
+	<script type="text/template" id="chart">
+		<div class="row">
+			<div class="col-sm-6">
+				<h2 class="h2"><%= period.name %></h2>
+			</div>
+			<div class="col-sm-6 chart">
+				<div class="<%= period.status %>"><%= period.profit %></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<% yeild %>
+			</div>
+		</div>
+	</script>
+	<!-- end templates -->
+
+
+
+	<div class="container">
+		<header>
+			<h1 class="h1">smart—money></h1>
+		</header>
+
+	<!-- today -->
+		<section id="today" class="module"></section>
+	<!-- /today-->
+	<!-- week -->
+		<section id="week" class="module"></section>
+	<!-- /week-->
+	<!-- month -->
+		<section id="month" class="module"></section>
+	<!-- /month-->
+
+		
+
+	<footer>
+		
+	</footer>
+</div>
+</body>
+
+
+
+
+</html>
