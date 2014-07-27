@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -31,8 +32,8 @@
             <div class = "col-sm-6">
             <h2 class = "h2"> <%= today.name %> </h2>
 			</div>
-            <div class = "col-sm-6 chart">
-            <div class = "<%= status %>"> <%= today.profit %> </div>
+            <div class = "col-sm-6 pull-right">
+                <div class="status <%= status %>"> <%= today.profit %> </div>
 			</div>
             </div>
 		<div class="row">
