@@ -12,15 +12,15 @@
     <script type="text/template" id="todayView">
         <div class = "row">
             <div class = "col-sm-7">
-            <h2 class = "h2"> <%= today.name %> </h2>
-				<h3><%= today.date %></h3>
+            <h2 class = "h2"> Today </h2>
+				<h3><%= name %></h3>
             <p class = "summary">
-            <span class = "summaryCallout"> <%= today.spent %> </span> out of <span class="summaryCallout"><%= today.budget %></span>
+            <span class = "summaryCallout"> <%= spent %> </span> out of <span class="summaryCallout"><%= budget %></span>
             </p>
 			</div>
             <div class = "col-sm-5">
             <div class = "rounded-chart">
-            <h2 class = "h2 <%= today.status %>"> <%= today.profit %> </h2>
+            <h2 class = "h2 <%= status %>"> <%= profit %> </h2>
 				</div>
             </div>
 		</div>
@@ -30,10 +30,10 @@
     <script type="text/template" id="periodView">
         <div class = "row">
             <div class = "col-sm-6">
-            <h2 class = "h2"> <%= today.name %> </h2>
+            <h2 class = "h2"> <%= name %> </h2>
 			</div>
             <div class = "col-sm-6 pull-right">
-                <div class="status <%= status %>"> <%= today.profit %> </div>
+                <div class="status <%= status %>"> <%= profit %> </div>
 			</div>
             </div>
 		<div class="row">
@@ -60,6 +60,10 @@
         <!-- month -->
         <section id="month" class="module"></section>
         <!-- /month-->
+        <!-- year -->
+        <section id="year" class="module"></section>
+        <!-- /year-->
+
 
 
         <footer>
