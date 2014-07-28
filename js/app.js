@@ -52,6 +52,7 @@ var TimePeriod = Backbone.Model.extend({
 	budget: 100,
 	status: "neutral",
 	profit: 0,
+	dailyPrecent: 0,
 	transactions: [],
 	displayFormat: "",
 	start: moment(),
@@ -96,12 +97,14 @@ var yearView = new PeriodView({
 
 
 var dataForPeriod = function (period, name) {
+	var profit = Math.round(period.budget - period.spent);
 	return {
 		name: name,
 		spent: Math.round(period.spent),
 		budget: Math.round(period.budget),
 		status: period.budget - period.spent > 0 ? "positive" : "negative",
-		profit: Math.round(period.budget - period.spent),
+		profit: profit,
+		dailyPrecent: Math.max(Math.round(((period.budget-period.spent)/period.budget)*100),0) ,
 		transactions: period.transactions,
 		start: period.beginPeriod,
 		end: period.endPeriod

@@ -21,8 +21,8 @@
 			</div>
             <div class = "col-sm-5">
             <div class = "rounded-chart">
-            <div class="progress-radial progress-25">
-                    <div class="overlay"><h2 class = "h2 <%= status %>"> <%= profit %> </h2>%</div>
+            <div class="progress-radial progress-<%=(Math.round(dailyPrecent / 10) * 10)%>">
+                    <div class="overlay"><h2 class = "h2 <%= status %>"><%=dailyPrecent%></h2>%</div>
             </div>
 				</div>
             </div>
