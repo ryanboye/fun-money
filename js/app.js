@@ -14,7 +14,7 @@ var TodayView = Marionette.ItemView.extend({
 		'change': 'fieldsChanged'
 	},
 	events: {
-		"click .h2": "prevDate"
+		"click .name": "prevDate"
 	},
 	fieldsChanged: function () {
 		this.render();
