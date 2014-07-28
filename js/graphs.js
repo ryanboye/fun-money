@@ -9,7 +9,10 @@ var GRAPHS = (function () {
 	GRAPHS.createPeriodView = function (graphelement, model, d3Selection) {
 		var periodData = model.get("transactions");
 		var displayFormat = model.get("displayFormat");
-		var start = model.get("start")
+		var tickInterval = model.get("tickInterval");
+		var tickStep = model.get("tickStep");
+		var bucketSize = model.get("bucketSize");
+		var start = model.get("start");
 		var end = model.get("end");
 		console.log(periodData);
 		console.log(start.format());
@@ -20,14 +23,14 @@ var GRAPHS = (function () {
 				.reduceXTicks(false) //If 'false', every single x-axis tick label will be rendered.
 				.rotateLabels(0) //Angle to rotate x-axis labels.
 				.showControls(false) //Allow user to switch between 'Grouped' and 'Stacked' mode.
-				.groupSpacing(0.1)
+				.groupSpacing(.1)
 				.stacked(true)
 				.height(250)
 				.margin({
 					top: 0,
-					right: 0,
+					right: 20,
 					bottom: 0,
-					left: 0
+					left: 20
 				})
 				.showLegend(false)
 
@@ -37,21 +40,35 @@ var GRAPHS = (function () {
 					return ""
 				})
 
+			var timeFormat = d3.time.format(displayFormat);
+			var datedomain = tickInterval.range(start.toDate(), end.toDate(), tickStep);
+			var domain = datedomain.map(function (d) {
+				return d.getTime();
+			});
 
-			chart.xAxis
-				.tickFormat(d3.time.format(displayFormat));
+			var domain = datedomain.map(function (d) {
+				return d.getTime();
+			});
 
-			var scale = d3.time.scale();
-			scale.range([start.toDate(), end.toDate()]);
-			scale.invert();
-			scale.ticks(d3.time.day, 1);
+			chart.xAxis.tickValues(domain);
+			chart.xAxis.tickFormat(function (d) {
+				var copy = new Date();
+				copy.setTime(d);
+				return timeFormat(copy);
+			});
 
-			chart.xAxis
-				.scale(scale);
+
+			chart.xDomain(domain);
+			//chart.xRange(domain);
+
+
+
+			//.rangeBands([start.toDate().getTime(), end.toDate().getTime()]);
 
 
 			d3Selection = d3.selectAll(graphelement.toArray());
-			d3Selection.datum(processData(periodData))
+			var proccessedData = processData(periodData, bucketSize, datedomain);
+			d3Selection.datum(proccessedData)
 				.call(chart);
 
 
@@ -62,26 +79,32 @@ var GRAPHS = (function () {
 	};
 
 
-	//Generate some nice data.
-	var processData = function (periodData) {
+	var processData = function (periodData, bucketSize, domain) {
 
 		var graphdata = [{
 			key: "spending",
 			values: []
         }];
+
+		for (var j = 0; j < domain.length; j++) {
+			var newdataum = {
+				y: 0,
+				x: moment(domain[i]).startOf("day").toDate().getTime()
+			};
+			graphdata[0].values.push(newdataum);
+		}
+
 		for (var i = 0; i < periodData.length; i++) {
 
 			var t = periodData[i];
 
 			var newdataum = {
 				y: t.Amount,
-				x: t.Date.toDate()
+				x: t.Date.startOf("day").toDate().getTime()
 			};
 
 			graphdata[0].values.push(newdataum);
 		}
-
-
 
 		return graphdata;
 	};

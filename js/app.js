@@ -13,9 +13,14 @@ var TodayView = Marionette.ItemView.extend({
 	modelEvents: {
 		'change': 'fieldsChanged'
 	},
-
+	events: {
+		"click .h2": "prevDate"
+	},
 	fieldsChanged: function () {
 		this.render();
+	},
+	prevDate: function () {
+		update(currDate.subtract('days', 1), 80000);
 	}
 });
 
@@ -51,18 +56,28 @@ var TimePeriod = Backbone.Model.extend({
 	displayFormat: "",
 	start: moment(),
 	end: moment(),
-	d3Selection: null
+	d3Selection: null,
+	tickInterval: d3.time.day,
+	tickStep: 2,
+	bucketSize: "day"
 });
 
 var day = new TimePeriod();
 var week = new TimePeriod({
-	displayFormat: "%a"
+	displayFormat: "%a",
+	tickInterval: d3.time.day,
+	tickStep: 1
 });
 var month = new TimePeriod({
-	displayFormat: "%e"
+	displayFormat: "%e",
+	tickInterval: d3.time.day,
+	tickStep: 2
 });
 var year = new TimePeriod({
-	displayFormat: "%m"
+	displayFormat: "%m",
+	tickInterval: d3.time.month,
+	tickStep: 1,
+	bucketSize: "month"
 });
 
 // wire up views to their models
@@ -105,8 +120,8 @@ var update = function (targetdate, budget) {
 };
 
 var data = STATS.loadData();
-
-update(moment(), 80000);
+var currDate = moment();
+update(currDate, 80000);
 
 App.today.show(todayView);
 App.week.show(weekView);
