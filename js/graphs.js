@@ -1,12 +1,12 @@
-var GRAPHS = (function () {
-	var GRAPHS = {};
+var MONEY = (function (module) {
+	'use strict';
 
-	GRAPHS.updatePeriodView = function (model, d3Selection) {
+	module.updatePeriodView = function (model, d3Selection) {
 		var periodData = model.get("transactions");
 		d3Selection.datum(processData(periodData));
 	};
 
-	GRAPHS.createPeriodView = function (graphelement, model, d3Selection) {
+	module.createPeriodView = function (graphelement, model, d3Selection) {
 		var periodData = model.get("transactions");
 		var displayFormat = model.get("displayFormat");
 		var tickInterval = model.get("tickInterval");
@@ -109,5 +109,5 @@ var GRAPHS = (function () {
 		return graphdata;
 	};
 
-	return GRAPHS;
-}());
+	return module;
+}(MONEY || {}));

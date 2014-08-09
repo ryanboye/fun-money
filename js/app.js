@@ -7,62 +7,6 @@ App.addRegions({
 	"year": "#year"
 });
 
-var TodayView = Marionette.ItemView.extend({
-	className: 'view',
-	template: "#todayView",
-	modelEvents: {
-		'change': 'fieldsChanged'
-	},
-	events: {
-		"click .name": "prevDate"
-	},
-	fieldsChanged: function () {
-		this.render();
-	},
-	prevDate: function () {
-		update(currDate.subtract('days', 1), 80000);
-	}
-});
-
-var PeriodView = Marionette.ItemView.extend({
-	className: 'view',
-	template: "#periodView",
-	modelEvents: {
-		'change': 'fieldsChanged'
-	},
-	fieldsChanged: function () {
-		this.render();
-		if (this.d3Selection !== null) {
-			GRAPHS.updatePeriodView(this.model, this.d3Selection);
-		}
-	},
-	d3Selection: null,
-	onRender: function () {
-		if (this.d3Selection === null) {
-			var graphdiv = this.$el.find(".graph");
-			GRAPHS.createPeriodView(graphdiv, this.model, this.d3Selection);
-		}
-	}
-});
-
-var TimePeriod = Backbone.Model.extend({
-	name: "Period",
-	date: moment().format('MMMM Do YYYY'),
-	spent: 100,
-	budget: 100,
-	status: "neutral",
-	profit: 0,
-	dailyPrecent: 0,
-	transactions: [],
-	displayFormat: "",
-	start: moment(),
-	end: moment(),
-	d3Selection: null,
-	tickInterval: d3.time.day,
-	tickStep: 2,
-	bucketSize: "day"
-});
-
 var day = new TimePeriod();
 var week = new TimePeriod({
 	displayFormat: "%a",
@@ -104,7 +48,7 @@ var dataForPeriod = function (period, name) {
 		budget: Math.round(period.budget),
 		status: period.budget - period.spent > 0 ? "positive" : "negative",
 		profit: profit,
-		dailyPrecent: Math.max(Math.round(((period.budget-period.spent)/period.budget)*100),0) ,
+		dailyPrecent: Math.max(Math.round(((period.budget - period.spent) / period.budget) * 100), 0),
 		transactions: period.transactions,
 		start: period.beginPeriod,
 		end: period.endPeriod
@@ -113,7 +57,7 @@ var dataForPeriod = function (period, name) {
 
 var update = function (targetdate, budget) {
 
-	var stats = STATS.get(data, targetdate, budget);
+	var stats = statProvider.get(targetdate, budget);
 
 	day.set(dataForPeriod(stats.day, targetdate.format('MMMM Do YYYY')));
 	week.set(dataForPeriod(stats.week, "This Week"));
@@ -122,7 +66,7 @@ var update = function (targetdate, budget) {
 
 };
 
-var data = STATS.loadData();
+var statProvider = new MONEY.GetStatProvider();
 var currDate = moment();
 update(currDate, 80000);
 
